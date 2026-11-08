@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#10101a" />
+  <title>PLAYSPACE — Free Games</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #10101a;
+      --panel: #191926;
+      --panel-hover: #222234;
+      --text: #f5f4ff;
+      --muted: #aaa9bd;
+      --accent: #a88bff;
+      --cyan: #6de5e7;
+      --border: rgba(255,255,255,.09);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 80% 0%, rgba(119, 78, 217, .2), transparent 36rem),
+        var(--bg);
+      color: var(--text);
+      font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    .wrap { width: min(1120px, calc(100% - 36px)); margin: auto; }
+    header {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-weight: 900; letter-spacing: .12em; font-size: 1.15rem; }
+    .logo span { color: var(--cyan); }
+    .nav { display: flex; align-items: center; gap: 24px; color: var(--muted); font-size: .92rem; }
+    .nav a:hover { color: var(--text); }
+
+    .hero {
+      padding: 66px 0 42px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 30px;
+    }
+    .eyebrow {
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-size: .76rem;
+      font-weight: 800;
+    }
+    h1 { margin: 10px 0 12px; font-size: clamp(2.4rem, 6vw, 4.5rem); line-height: 1.04; letter-spacing: -.055em; }
+    h1 span { color: var(--accent); }
+    .hero p { color: var(--muted); max-width: 590px; margin: 0; }
+    .hero-badge {
+      width: 140px; height: 140px; border-radius: 35px;
+      display: grid; place-items: center; font-size: 4.5rem;
+      background: linear-gradient(145deg, #33235f, #1d5260);
+      border: 1px solid rgba(255,255,255,.13);
+      transform: rotate(4deg);
+      box-shadow: 0 18px 60px rgba(0,0,0,.25);
+    }
+
+    .toolbar { display: flex; gap: 12px; margin: 8px 0 22px; }
+    .search {
+      flex: 1; min-width: 0; padding: 13px 16px;
+      color: var(--text); background: var(--panel);
+      border: 1px solid var(--border); border-radius: 12px; outline: none;
+    }
+    .search:focus { border-color: var(--accent); }
+    .search::placeholder { color: #77768b; }
+    .filter {
+      padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px;
+      background: var(--panel); color: var(--text); cursor: pointer;
+    }
+
+    .section-heading {
+      display: flex; align-items: end; justify-content: space-between;
+      gap: 12px; margin: 36px 0 16px;
+    }
+    h2 { margin: 0; font-size: 1.35rem; letter-spacing: -.025em; }
+    .section-heading p { color: var(--muted); margin: 0; font-size: .9rem; }
+
+    .chips { display: flex; gap: 9px; overflow-x: auto; padding: 2px 0 16px; }
+    .chip {
+      flex: 0 0 auto; border: 1px solid var(--border); border-radius: 999px;
+      color: var(--muted); background: transparent; padding: 8px 14px; cursor: pointer;
+    }
+    .chip:hover, .chip.active { color: #171322; background: var(--accent); border-color: var(--accent); }
+
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .card {
+      position: relative; overflow: hidden; min-width: 0;
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 17px; transition: transform .18s, background .18s;
+    }
+    .card:hover { transform: translateY(-4px); background: var(--panel-hover); }
+    .cover {
+      height: 145px; display: grid; place-items: center;
+      font-size: 4rem; position: relative; overflow: hidden;
+    }
+    .cover::after {
+      content: ""; position: absolute; width: 180px; height: 180px;
+      border: 1px solid rgba(255,255,255,.12); border-radius: 50%;
+      transform: translate(60px, 45px);
+    }
+    .cover span { z-index: 1; filter: drop-shadow(0 8px 10px rgba(0,0,0,.22)); }
+    .purple { background: linear-gradient(135deg, #583ba0, #bd69a9); }
+    .blue { background: linear-gradient(135deg, #155d89, #55c5c6); }
+    .orange { background: linear-gradient(135deg, #9b4b22, #f3b84b); }
+    .green { background: linear-gradient(135deg, #1e6b52, #9bdc76); }
+    .pink { background: linear-gradient(135deg, #963d70, #f18eaa); }
+    .indigo { background: linear-gradient(135deg, #353c93, #8584ed); }
+    .gold { background: linear-gradient(135deg, #8a641c, #eac45a); }
+    .teal { background: linear-gradient(135deg, #17636b, #70d7c0); }
+
+    .card-body { padding: 14px; }
+    .card-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .card h3 { margin: 0; font-size: 1rem; }
+    .card p { min-height: 42px; margin: 7px 0 12px; color: var(--muted); font-size: .84rem; }
+    .meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .tag { color: var(--cyan); font-size: .75rem; }
+    .play { color: var(--accent); font-weight: 750; font-size: .86rem; }
+    .heart {
+      position: absolute; right: 11px; top: 11px; z-index: 2;
+      width: 36px; height: 36px; display: grid; place-items: center;
+      border: 1px solid rgba(255,255,255,.17); border-radius: 50%;
+      background: rgba(16,16,26,.7); color: white; cursor: pointer;
+    }
+    .heart.saved { color: #ff76a7; }
+    .empty { grid-column: 1 / -1; color: var(--muted); text-align: center; padding: 45px 10px; }
+
+    .libraries {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 56px;
+    }
+    .library {
+      padding: 18px; border-radius: 15px; background: var(--panel);
+      border: 1px solid var(--border); transition: background .18s;
+    }
+    .library:hover { background: var(--panel-hover); }
+    .library strong { display: block; margin-bottom: 5px; }
+    .library span { color: var(--muted); font-size: .85rem; }
+    footer { border-top: 1px solid var(--border); color: var(--muted); padding: 22px 0 30px; font-size: .83rem; }
+
+    @media (max-width: 850px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .libraries { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .nav { gap: 12px; font-size: .82rem; }
+      .hero { padding-top: 48px; grid-template-columns: 1fr; }
+      .hero-badge { display: none; }
+      .toolbar { flex-direction: column; }
+      .grid { gap: 10px; }
+      .cover { height: 115px; font-size: 3.3rem; }
+      .card-body { padding: 11px; }
+      .section-heading { align-items: start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <a class="logo" href="#" aria-label="PLAYSPACE home">PLAY<span>SPACE</span></a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#games">Games</a>
+      <a href="#libraries">Game libraries</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Your next game is waiting</div>
+        <h1>Big fun.<br /><span>Zero price tag.</span></h1>
+        <p>Discover free games you can play in your browser. Pick a mood, find a favorite, and jump straight into the fun.</p>
+      </div>
+      <div class="hero-badge" aria-hidden="true">🎮</div>
+    </section>
+
+    <section id="games" aria-labelledby="games-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="games-title">Explore free games</h2>
+          <p>Hand-picked browser games—no download required.</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input id="search" class="search" type="search" placeholder="Search games..." aria-label="Search games" />
+        <select id="sort" class="filter" aria-label="Sort games">
+          <option value="popular">Sort: Popular</option>
+          <option value="az">Sort: A–Z</option>
+          <option value="favorites">Sort: Favorites first</option>
+        </select>
+      </div>
+
+      <div id="chips" class="chips" aria-label="Filter by genre"></div>
+      <div id="gameGrid" class="grid"></div>
+    </section>
+
+    <section id="libraries">
+      <div class="section-heading">
+        <div>
+          <h2>Explore even more</h2>
+          <p>Browse large collections of free-to-play games.</p>
+        </div>
+      </div>
+      <div class="libraries">
+        <a class="library" href="https://itch.io/games/free" target="_blank" rel="noopener noreferrer">
+          <strong>itch.io — Free games ↗</strong>
+          <span>Indie games across every genre.</span>
+        </a>
+        <a class="library" href="https://poki.com/" target="_blank" rel="noopener noreferrer">
+          <strong>Poki ↗</strong>
+          <span>A big collection of instant browser games.</span>
+        </a>
+        <a class="library" href="https://www.crazygames.com/" target="_blank" rel="noopener noreferrer">
+          <strong>CrazyGames ↗</strong>
+          <span>Play free online games in your browser.</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer id="about">
+    <div class="wrap">PLAYSPACE is an independent game-discovery page. Games and their terms are provided by their respective creators.</div>
+  </footer>
+
+  <script>
+    const games = [
+      { name: "2048", genre: "Puzzle", emoji: "🔢", style: "purple", description: "Slide tiles, combine numbers, and reach 2048.", url: "https://play2048.co/" },
+      { name: "Tetris", genre: "Arcade", emoji: "🧱", style: "blue", description: "Fit falling blocks together and clear the board.", url: "https://tetris.com/play-tetris" },
+      { name: "Lichess", genre: "Strategy", emoji: "♟️", style: "indigo", description: "Play chess online, solve puzzles, or face a bot.", url: "https://lichess.org/" },
+      { name: "Slither.io", genre: "Arcade", emoji: "🐍", style: "green", description: "Grow your snake and climb the online leaderboard.", url: "https://slither.io/" },
+      { name: "Agar.io", genre: "Arcade", emoji: "🟣", style: "pink", description: "Grow your cell and try to become the biggest.", url: "https://agar.io/" },
+      { name: "Little Alchemy 2", genre: "Puzzle", emoji: "🧪", style: "teal", description: "Combine simple elements to discover new things.", url: "https://littlealchemy2.com/" },
+      { name: "Cookie Clicker", genre: "Casual", emoji: "🍪", style: "orange", description: "Bake cookies, unlock upgrades, and keep clicking.", url: "https://orteil.dashnet.org/cookieclicker/" },
+      { name: "Chess.com", genre: "Strategy", emoji: "👑", style: "gold", description: "Play chess, learn tactics, and challenge friends.", url: "https://www.chess.com/play" }
+    ];
+
+    const genres = ["All", ...new Set(games.map(game => game.genre))];
+    const saved = new Set(JSON.parse(localStorage.getItem("playspace-favorites") || "[]"));
+    let activeGenre = "All";
+
+    const grid = document.getElementById("gameGrid");
+    const search = document.getElementById("search");
+    const sort = document.getElementById("sort");
+    const chips = document.getElementById("chips");
+
+    function renderChips() {
+      chips.innerHTML = genres.map(genre => `
+        <button class="chip ${genre === activeGenre ? "active" : ""}" data-genre="${genre}">
+          ${genre}
+        </button>
+      `).join("");
+
+      chips.querySelectorAll(".chip").forEach(button => {
+        button.addEventListener("click", () => {
+          activeGenre = button.dataset.genre;
+          renderChips();
+          renderGames();
+        });
+      });
+    }
+
+    function renderGames() {
+      const term = search.value.trim().toLowerCase();
+      let visible = games.filter(game =>
+        (activeGenre === "All" || game.genre === activeGenre) &&
+        (game.name.toLowerCase().includes(term) ||
+         game.genre.toLowerCase().includes(term) ||
+         game.description.toLowerCase().includes(term))
+      );
+
+      if (sort.value === "az") visible.sort((a, b) => a.name.localeCompare(b.name));
+      if (sort.value === "favorites") visible.sort((a, b) => Number(saved.has(b.name)) - Number(saved.has(a.name)));
+
+      if (!visible.length) {
+        grid.innerHTML = '<div class="empty">No games found. Try another search or genre.</div>';
+        return;
+      }
+
+      grid.innerHTML = visible.map(game => `
+        <article class="card">
+          <button class="heart ${saved.has(game.name) ? "saved" : ""}"
+            data-favorite="${game.name}"
+            aria-label="${saved.has(game.name) ? "Remove from" : "Add to"} favorites">
+            ${saved.has(game.name) ? "♥" : "♡"}
+          </button>
+          <a href="${game.url}" target="_blank" rel="noopener noreferrer" aria-label="Play ${game.name}">
+            <div class="cover ${game.style}"><span>${game.emoji}</span></div>
+            <div class="card-body">
+              <div class="card-title"><h3>${game.name}</h3></div>
+              <p>${game.description}</p>
+              <div class="meta"><span class="tag">${game.genre}</span><span class="play">Play free ↗</span></div>
+            </div>
+          </a>
+        </article>
+      `).join("");
+
+      grid.querySelectorAll("[data-favorite]").forEach(button => {
+        button.addEventListener("click", event => {
+          event.preventDefault();
+          event.stopPropagation();
+          const name = button.dataset.favorite;
+          saved.has(name) ? saved.delete(name) : saved.add(name);
+          localStorage.setItem("playspace-favorites", JSON.stringify([...saved]));
+          renderGames();
+        });
+      });
+    }
+
+    search.addEventListener("input", renderGames);
+    sort.addEventListener("change", renderGames);
+    renderChips();
+    renderGames();
+  </script>
+</body>
+</html>
